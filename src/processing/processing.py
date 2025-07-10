@@ -1,17 +1,4 @@
-# Nivel 1: Carga y exploración básica
-# Carga el CSV en un DataFrame de PySpark con el esquema inferido y las cabeceras.
-
-# Muestra las primeras 10 filas para entender las columnas.
-
-# Cuenta el número total de registros en el dataset.
-
-# Muestra el esquema para conocer tipos de datos.
-
-# Imprime un resumen estadístico (describe) de las columnas numéricas como price, minimum_nights, number_of_reviews.
-
-
-
-
+class Processing:
 
 # Nivel 2: Filtrado y selección
 # Filtra las propiedades que están en el barrio de 'Manhattan'.
