@@ -24,9 +24,7 @@ class Utils:
 
     #Print the stadistics summary for integer columns; show max, min and mean for price col.
     def stadistic_summary(df:DataFrame) -> DataFrame:
-        integer_cols = [f.name for f in df.schema.fields if isinstance(f.dataType, IntegerType)]
-        df_integers = df.select(integer_cols)
-        return df_integers.select(max("price").alias("Max Price"), min("price").alias("Min Price"), mean("price").alias("Mean Price"))
+        return df.select(max("price").alias("Max Price"), min("price").alias("Min Price"), mean("price").alias("Mean Price"))
 
     def sum(df:DataFrame) -> DataFrame:
         integer_cols = [f.name for f in df.schema.fields if isinstance(f.dataType, IntegerType)]
@@ -39,3 +37,9 @@ class Utils:
         df_integers = df.select(integer_cols)
 
         return df.select([mean(c).alias("mean") for c in df_integers.columns])
+
+    def max_values(df:DataFrame) -> DataFrame:
+        integer_cols = [c.name for c in df.schema.fields if isinstance(c.dataType, IntegerType)]
+        df_integers = df.select(integer_cols)
+        
+        return df.select([max(c).alias(c + f' max value') for c in df_integers.columns])

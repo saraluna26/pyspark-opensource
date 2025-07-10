@@ -1,5 +1,6 @@
 from pyspark.sql import SparkSession
 from utils.Utils import Utils
+from pyspark.sql.functions import desc
 
 
 def main():
@@ -31,6 +32,13 @@ def main():
 
     Utils.sum(df_ny_method).show()
     Utils.mean(df_ny_method).show()
+
+    Utils.max_values(df_ny_method).show()
+
+    df_ny_method.orderBy(desc("price")).show(10)
+
+
+
 
 
 
