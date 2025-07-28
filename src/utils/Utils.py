@@ -1,6 +1,7 @@
 from pyspark.sql import DataFrame
 from pyspark.sql.types import IntegerType
-from pyspark.sql.functions import sum, mean, min, max, col
+from pyspark.sql.functions import sum, mean, min, max, col, when, rank, desc
+from pyspark.sql.window import Window
 
 
 class Utils:
@@ -43,3 +44,18 @@ class Utils:
         df_integers = df.select(integer_cols)
         
         return df.select([max(c).alias(c + f' max value') for c in df_integers.columns])
+
+
+    def new_column_price_category (df:DataFrame) -> DataFrame:
+        return df.withColumn("Price Category", when(col("price") <= 120, "Cheap").when(col("price") <= 500, "Medium").when(col("price") > 500, "Expensive").otherwise("No"))
+
+    def window_price_category(df:DataFrame) -> DataFrame:
+        window=Window.partitionBy("Price Category").orderBy(desc("price"))
+        return df.withColumn("total_num_reviews", sum("number_of_reviews").over(window))
+        #.withColumn("rank", rank().over(window))
+        #.withColumn("price_quintile"), nile(5).over(window)
+
+
+    def group_by_category(df:DataFrame) -> DataFrame:
+        return df.groupBy("Price Category").agg(sum("number_of_reviews").alias("total_agg_revies"))
+

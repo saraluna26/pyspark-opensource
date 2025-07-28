@@ -37,10 +37,22 @@ def main():
 
     df_ny_method.orderBy(desc("price")).show(10)
 
+    df_new_column = Utils.new_column_price_category(df_ny_method)
+    df_new_column.select("name", "price", "Price Category").show()
+
+    df_window = Utils.window_price_category(df_new_column)
+    df_window.select("name", "price", "Price Category", "total_num_reviews").show()
+
+    # Using grouo by - we lose the extra information as name or price
+    df_group_by = Utils.group_by_category(df_new_column)
+    df_group_by.select("Price Category", "total_agg_revies").show()
 
 
 
+#main() -- execute always the content when import it
 
-
+# Clean and best practice. Only execute the content when this condition is true. This condition is only true if the file (__name__ variable) to run is this one (main).
+# Doing that, we control the execution and avoid execute the code from outside. 
 if __name__ == "__main__":
+   # print(dir(main))
     main()
