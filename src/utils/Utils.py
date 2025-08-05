@@ -59,3 +59,6 @@ class Utils:
     def group_by_category(df:DataFrame) -> DataFrame:
         return df.groupBy("Price Category").agg(sum("number_of_reviews").alias("total_agg_revies"))
 
+
+
+

@@ -1,5 +1,7 @@
 class Processing:
 
+    
+
 # Nivel 2: Filtrado y selección
 # Filtra las propiedades que están en el barrio de 'Manhattan'.
 

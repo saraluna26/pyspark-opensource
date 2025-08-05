@@ -1,4 +1,4 @@
 notebook==7.2.0
 pandas
 pyspark
-jupyter notebook
+notebook

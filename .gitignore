@@ -1,3 +1,4 @@
 __pycache__/
 .ipynb_checkpoints/
 .DS_Store
+/Users/sarasolis/pyspark-opensource/data/static/AB_NYC_2019.csv

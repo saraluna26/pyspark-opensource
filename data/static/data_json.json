@@ -1,0 +1,2 @@
+{"policy_id": "P001", "customer": {"id": "C123", "name": "Sara Lee"}, "premium": "1000", "issue_date": "2023-01-15", "status": "in progress"}
+{"policy_id": "P002", "customer": "null", "premium": "not available", "issue_date": "invalid_date", "status": "cancelled"}
