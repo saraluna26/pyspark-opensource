@@ -166,4 +166,18 @@ if __name__ == "__main__":
   print("Max and min price of Brooklyn: ")
   Processing.max_min_price_by_neighbourhood(df_category, "Brooklyn").show()
 
+  df_category.select('name', 'neighbourhood_group', 'price', 'availability_365').show()
+
+  Processing.group_by_neighbourhood_mean(df_category).show()
+
+  Processing.get_neighbourhood_with_more_propreties(df_category).show()
+  Processing.get_neighbourhood_with_more_propretiesB(df_category).show()
+  print(Processing.get_neighbourhood_with_more_propretiesB(df_category).collect()[0].asDict())
+
+  Processing.reviews_mean_by_room_ttype(df_category).show()
+
+  Processing.neighbourhood_more_availability(df_category).show()
+
+  Processing.order_by_price_neighbourhood(df_category).show()
+
   

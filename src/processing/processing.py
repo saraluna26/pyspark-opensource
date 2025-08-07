@@ -1,11 +1,14 @@
 from pyspark.sql import DataFrame
-from pyspark.sql.functions import when, col, desc, sum, to_timestamp, lit, struct, max, min
+from pyspark.sql.functions import when, col, desc, sum, to_timestamp, lit, struct, max, min, mean, desc
 from pyspark.sql.window import Window
 
 class Processing:
 
     def new_column_price_category (df:DataFrame) -> DataFrame:
-        return df.withColumn("Price Category", when(col("price") <= 120, "Cheap").when(col("price") <= 500, "Medium").when(col("price") > 500, "Expensive").otherwise("No"))
+        return df.withColumn("Price Category", when(col("price") <= 120, "Cheap")\
+            .when(col("price") <= 500, "Medium")\
+            .when(col("price") > 500, "Expensive")
+            .otherwise("No"))
 
     def window_price_category(df:DataFrame) -> DataFrame:
         window=Window.partitionBy("Price Category").orderBy(desc("price"))
@@ -64,49 +67,37 @@ class Processing:
         )
         ).withColumn('customer_name', col('customer.name')).withColumn('customer_id', col('customer.id'))
 
-    @staticmethod
     def filter_by_neighbourhood(df:DataFrame, neighbourhood) -> DataFrame:
         return df.filter(col("neighbourhood_group") == neighbourhood)
 
     def count_rows_by_room_type(df:DataFrame) -> DataFrame:
         return df.groupBy(col("room_type")).count()
 
-    @staticmethod
     def max_min_price_by_neighbourhood( df:DataFrame, neighbourhood) -> DataFrame:
         return df.filter(col("neighbourhood_group")==neighbourhood) \
         .groupBy(col("neighbourhood_group")) \
         .agg(max(col("price")).alias("max_price"), min(col("price").alias("min_price")))
-        # df_filtered = Processing.filter_by_neighbourhood(df,"Brooklyn")
-        # return df_filtered.agg("max_price", max("price"),("min_price", min("price")))
 
-    
+    def group_by_neighbourhood_mean(df:DataFrame) -> DataFrame:
+        return df.groupBy(col("neighbourhood_group")).agg(mean(col("price").alias("promedio")))
 
-    
+    def get_neighbourhood_with_more_propreties(df:DataFrame) -> DataFrame: 
+        return df.select("name", "neighbourhood_group").groupBy(col("neighbourhood_group")).count().agg(max("count").alias("max_count"))
 
+    def get_neighbourhood_with_more_propretiesB(df:DataFrame) -> DataFrame: 
+        return df.groupBy(col("neighbourhood_group"))\
+        .count()\
+        .orderBy(col("count").desc())\
+        .limit(1)
 
+    def reviews_mean_by_room_ttype(df:DataFrame) -> DataFrame:
+        return df.groupBy(col("room_type")).agg(mean(col("number_of_reviews"))) #.alias("mean_reviews")
 
-# Nivel 2: Filtrado y selección
-# Filtra las propiedades que están en el barrio de 'Manhattan'.
-# Cuenta cuántas propiedades hay por tipo de habitación (room_type).
+    def neighbourhood_more_availability(df:DataFrame) -> DataFrame:
+        return df.groupBy(col("neighbourhood_group")).agg(mean(col("availability_365")).alias("Disponibilidad anual"))
 
-# Selecciona solo las columnas name, neighbourhood_group, price y availability_365.
-
-# Filtra propiedades con precio mayor a 200 dólares.
-
-# Encuentra el precio máximo y mínimo de las propiedades en Brooklyn.
-
-
-
-# Nivel 3: Agrupaciones y agregaciones
-# Agrupa por neighbourhood_group y calcula el precio promedio.
-
-# Encuentra el barrio con más propiedades listadas.
-
-# Calcula el promedio de reviews por tipo de habitación.
-
-# Encuentra el barrio con la mayor disponibilidad anual (availability_365) promedio.
-
-# Ordena los barrios por precio promedio descendente.
+    def order_by_price_neighbourhood(df:DataFrame) -> DataFrame:
+        return df.groupBy(col("neighbourhood_group")).agg(mean(col("price")).alias("Mean Price")).orderBy(col("Mean Price").desc())
 
 
 
