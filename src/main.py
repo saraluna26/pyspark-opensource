@@ -180,4 +180,6 @@ if __name__ == "__main__":
 
   Processing.order_by_price_neighbourhood(df_category).show()
 
+  Processing.sum_price_by_room_type(df_category).show()
+
   

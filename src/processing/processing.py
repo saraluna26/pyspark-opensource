@@ -1,5 +1,5 @@
 from pyspark.sql import DataFrame
-from pyspark.sql.functions import when, col, desc, sum, to_timestamp, lit, struct, max, min, mean, desc
+from pyspark.sql.functions import when, col, desc, sum, to_timestamp, lit, struct, max, min, mean, desc, asc
 from pyspark.sql.window import Window
 
 class Processing:
@@ -99,6 +99,9 @@ class Processing:
     def order_by_price_neighbourhood(df:DataFrame) -> DataFrame:
         return df.groupBy(col("neighbourhood_group")).agg(mean(col("price")).alias("Mean Price")).orderBy(col("Mean Price").desc())
 
+    def sum_price_by_room_type(df:DataFrame) -> DataFrame:
+        room_type_window = Window.partitionBy(col("room_type"))
+        return df.withColumn("total_price_by_room_type", sum("price").over(room_type_window)).orderBy(col("total_price_by_room_type").asc())
 
 
 
@@ -125,3 +128,16 @@ class Processing:
 # Crea un resumen de disponibilidad por tipo de habitación y barrio.
 
 # Escribe un DataFrame filtrado en formato parquet para su uso futuro.
+
+
+#Data quality
+# Detectar y manejar valores nulos en columnas clave.
+# Identificar y eliminar filas duplicadas.
+# Validar y corregir tipos de datos incorrectos.
+# Filtrar valores fuera de rango o inválidos.
+# Normalizar y unificar valores categóricos inconsistentes.
+# Verificar unicidad y presencia de claves primarias o IDs.
+# Aplicar reglas de negocio entre columnas para validar consistencia.
+# Validar formatos de columnas de fecha y email.
+# Detectar y tratar valores atípicos (outliers).
+# Documentar calidad y generar reportes de Data Quality.
