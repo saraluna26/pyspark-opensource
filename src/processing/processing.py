@@ -1,5 +1,5 @@
 from pyspark.sql import DataFrame
-from pyspark.sql.functions import when, col, desc, sum, to_timestamp, lit, struct
+from pyspark.sql.functions import when, col, desc, sum, to_timestamp, lit, struct, max, min
 from pyspark.sql.window import Window
 
 class Processing:
@@ -64,12 +64,20 @@ class Processing:
         )
         ).withColumn('customer_name', col('customer.name')).withColumn('customer_id', col('customer.id'))
 
+    @staticmethod
     def filter_by_neighbourhood(df:DataFrame, neighbourhood) -> DataFrame:
         return df.filter(col("neighbourhood_group") == neighbourhood)
 
-    def count_rows_by_room_type(df:DataFrame, roomtype) -> DataFrame:
-        pass
+    def count_rows_by_room_type(df:DataFrame) -> DataFrame:
+        return df.groupBy(col("room_type")).count()
 
+    @staticmethod
+    def max_min_price_by_neighbourhood( df:DataFrame, neighbourhood) -> DataFrame:
+        return df.filter(col("neighbourhood_group")==neighbourhood) \
+        .groupBy(col("neighbourhood_group")) \
+        .agg(max(col("price")).alias("max_price"), min(col("price").alias("min_price")))
+        # df_filtered = Processing.filter_by_neighbourhood(df,"Brooklyn")
+        # return df_filtered.agg("max_price", max("price"),("min_price", min("price")))
 
     
 
@@ -79,7 +87,6 @@ class Processing:
 
 # Nivel 2: Filtrado y selección
 # Filtra las propiedades que están en el barrio de 'Manhattan'.
-
 # Cuenta cuántas propiedades hay por tipo de habitación (room_type).
 
 # Selecciona solo las columnas name, neighbourhood_group, price y availability_365.

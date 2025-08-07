@@ -159,3 +159,11 @@ if __name__ == "__main__":
 
 
   Processing.filter_by_neighbourhood(df_category, "Manhattan").show()
+
+  print("Number of rows per room type: ")
+  Processing.count_rows_by_room_type(df_category).show()
+
+  print("Max and min price of Brooklyn: ")
+  Processing.max_min_price_by_neighbourhood(df_category, "Brooklyn").show()
+
+  
